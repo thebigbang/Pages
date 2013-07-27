@@ -1,4 +1,4 @@
-ï»¿Custom Pages is a Windows .Net library made to help website developpers to manage .html content in their controller/view action.
+Custom Pages is a Windows .Net library made to help website developpers to manage .html content in their controller/view action.
 
 Basically it's purpose is to offer a similer system than the one in WordPress, or any cmd offering the possibility to add pages to a website.
 The main difference is that instead of using a database, it is using the filesystem, in a standalone way.
@@ -7,7 +7,7 @@ It can handle custom configuration information about pages.
 #todo#
 manage complete independency of controller and views if possible.
 
-#Chancelog#
+#Changelog#
 v0.2: lots of improvements, GPL licensing for GitHub.
 v0.1: initial Library design
 
@@ -17,4 +17,4 @@ Draft State
 Custom Title (otherwise the filename is used)
 A multilingual application configuration (todo: finish that)
 
-Everything is under copyrith 2013 by MeÃ¯-Garino JÃ©rÃ©my.
+Everything is under copyrith 2013 by Meï-Garino Jérémy.
