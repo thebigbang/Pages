@@ -23,7 +23,8 @@ namespace CustomPages.Models
     public class GenericPageModel
     {
         /// <summary>
-        /// Nom du fichier
+        /// Nom Convivial du fichier (pour Write)
+        /// Nom du fichier (pour Read)
         /// </summary>
         public string Name { get; set; }        
         /// <summary>

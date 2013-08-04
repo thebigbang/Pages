@@ -59,7 +59,8 @@ namespace CustomPages.Models.Admin
                            Title = genericPageModel.Title,
                            IsDraft = genericPageModel.IsDraft,
                            IsReadonly = genericPageModel.IsReadonly,
-                           SortOrder = genericPageModel.SortOrder
+                           SortOrder = genericPageModel.SortOrder,
+                           IsSystem = genericPageModel.IsSystem
                        };
         }
     }

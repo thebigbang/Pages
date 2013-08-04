@@ -170,6 +170,8 @@ namespace CustomPages
         /// <returns></returns>
         public static GenericPageModel ReadHtmlData(string fullPathFile)
         {
+
+            Models.Admin.GenericPageModel.Error = null;
             string s, title, name = fullPathFile;
             bool isDraft = false, isReadonly = false, isSystem = false;
             int sortOrder = 0;
@@ -246,6 +248,7 @@ namespace CustomPages
             }
             catch (FileNotFoundException e)
             {
+                Models.Admin.GenericPageModel.Error = e;
                 ErrorManager.SendMailError(e);
                 title = "Erreur d'affichage de la page.";
                 s = e.Message + "<br/>" +
@@ -369,6 +372,24 @@ namespace CustomPages
                 Models.Admin.GenericPageModel.Error = e;
                 return false;
             }
+        }
+        /// <summary>
+        /// Allow us to get a "default system page", it will be automatically created and fill blank if not existing.
+        /// </summary>
+        /// <param name="pageName">the pageName, as in ReadHtmlData can be a full path, a filename, or a friendly name</param>
+        /// <returns>The Model of that system page.</returns>
+        public static GenericPageModel GetSystemPage(string pageName)
+        {
+            GenericPageModel model = ReadHtmlData(pageName);
+            if (Models.Admin.GenericPageModel.Error != null &&
+                Models.Admin.GenericPageModel.Error is FileNotFoundException)
+            {
+                WriteHtmlData(new Models.Admin.GenericPageModel() { IsDraft = false, IsReadonly = true, IsSystem = true, Name = pageName,HtmlData = ""});
+
+                return GetSystemPage(pageName);
+            }
+            return model;
+
         }
     }
 }
