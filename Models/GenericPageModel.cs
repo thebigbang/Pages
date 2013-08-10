@@ -20,6 +20,7 @@ using System.Web.Mvc;
 
 namespace CustomPages.Models
 {
+    //todo: add metaDescription management.
     public class GenericPageModel
     {
         /// <summary>

@@ -215,15 +215,19 @@ namespace CustomPages
                                       HtmlParamDraftBegin.Length;
                     paramIndexEnd = parameters.IndexOf(HtmlParamDraftEnd, StringComparison.Ordinal) -
                                     paramIndexStart;
-                    bool.TryParse(parameters.Substring(paramIndexStart, paramIndexEnd), out isDraft);
-
+                    if (paramIndexEnd > 0)
+                    {
+                        bool.TryParse(parameters.Substring(paramIndexStart, paramIndexEnd), out isDraft);
+                    }
                     //readonly parameter:
                     paramIndexStart = parameters.IndexOf(HtmlParamReadOnlyBegin, StringComparison.Ordinal) +
                                       HtmlParamReadOnlyBegin.Length;
                     paramIndexEnd = parameters.IndexOf(HtmlParamReadOnlyEnd, StringComparison.Ordinal) -
                                     paramIndexStart;
-                    bool.TryParse(parameters.Substring(paramIndexStart, paramIndexEnd), out isReadonly);
-
+                    if (paramIndexEnd > 0)
+                    {
+                        bool.TryParse(parameters.Substring(paramIndexStart, paramIndexEnd), out isReadonly);
+                    }
                     //sortOrder parameter:
                     paramIndexStart = parameters.IndexOf(HtmlParamSortOrderBegin, StringComparison.Ordinal) +
                                       HtmlParamSortOrderBegin.Length;
