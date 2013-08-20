@@ -118,6 +118,15 @@ namespace CustomPages
             return re.Where(n => n != null).OrderBy(p => p.SortOrder).ToArray();
             //return Directory.GetFiles(path).Where(s =>!s.Contains(PageDraft)).Select(s => s.Replace(path, "")).ToArray();
         }
+        /// <summary>
+        /// Same as GetAllPages but convert it to a List&lt;GenericPageModel>
+        /// <para>Roughly just call GetAllPages...</para>
+        /// </summary>
+        /// <returns></returns>
+        public static List<GenericPageModel> GetAllPagesAsList()
+        {
+            return GetAllPages().ToList();
+        }
         private static IEnumerable<string> GetAllPagesNames()
         {
             string path = new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageFolderPath);
@@ -210,6 +219,7 @@ namespace CustomPages
                     int paramIndexEnd = parameters.IndexOf(HtmlParamTitleEnd, StringComparison.Ordinal) -
                                         paramIndexStart;
                     title = parameters.Substring(paramIndexStart, paramIndexEnd);
+                    if (String.IsNullOrEmpty(title)) title = name;
                     //draft parameter:
                     paramIndexStart = parameters.IndexOf(HtmlParamDraftBegin, StringComparison.Ordinal) +
                                       HtmlParamDraftBegin.Length;
@@ -317,6 +327,7 @@ namespace CustomPages
         }
         /// <summary>
         /// Not very clean nor usefull method but replace the deprecated GetPagesList() one.
+        /// prefer GetAll() to it...
         /// </summary>
         /// <returns></returns>
         public static List<GenericPageModel> GetPagesListM()
