@@ -15,6 +15,8 @@
  *  
  * Copyright (c) Meï-Garino Jérémy 
 */
+
+using System.Collections.Generic;
 using System.Web;
 using CustomPages.Models.Admin;
 
@@ -22,22 +24,28 @@ namespace CustomPages.Controllers.Admin
 {
     public class PageController
     {
+        /// <summary>
+        /// Default value of languages is fr.
+        /// </summary>
+        private static string currentLang = "fr";
        /* internal HttpServerUtilityBase Server;
         public PageController(HttpServerUtilityBase server)
         {
             Server = server;
         }*/
+
         /// <summary>
         /// permet la creation d'une page perso
-        /// todo: ajouter la possibilité de changer la langue depuis un EnumString.
         /// </summary>
         /// <param name="model"></param>
+        /// <param name="la">Language to use </param>
         /// <returns></returns>
-        public static bool Create(GenericPageModel model)
+        public static bool Create(GenericPageModel model,string la=null)
         {
+            if (la != null) currentLang = la;
             try
             {
-                System.IO.File.Create(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageLogik.PageFolderPath + model.Name + "_fr.html")).Close();
+                System.IO.File.Create(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageLogik.PageFolderPath + model.Name + "_"+currentLang+".html")).Close();
                 return true;
             }
             catch { return false; }
@@ -57,6 +65,21 @@ namespace CustomPages.Controllers.Admin
             System.IO.File.Delete(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageLogik.PageFolderPath + name + "_fr.html"));
             return false;
 
+        }
+        /// <summary>
+        /// Return a list of string of all the avaiable languages, permitting to set/edit the default language value with a selection box for example.
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetAvaiableLanguages()
+        {
+            List<string> ss=new List<string>();
+            foreach (string pageName in PageLogik.GetAllPagesNames())
+            {
+                string langName = pageName.Split('_')[1].Split('.')[0];
+                if(ss.Contains(langName))continue;
+                ss.Add(langName);
+            }
+            return ss;
         }
 
     }

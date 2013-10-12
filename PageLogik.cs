@@ -127,7 +127,7 @@ namespace CustomPages
         {
             return GetAllPages().ToList();
         }
-        private static IEnumerable<string> GetAllPagesNames()
+        internal static IEnumerable<string> GetAllPagesNames()
         {
             string path = new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageFolderPath);
             return Directory.GetFiles(path).Where(s => !s.Contains(PageDraft)).Select(s => s.Replace(path, "")).ToArray();
@@ -336,7 +336,7 @@ namespace CustomPages
         }
 
         /// <summary>
-        /// todo: write in comment header our custom parameters by building a SuperString.
+        ///
         /// </summary>
         /// <param name="pagesModel"></param>
         /// <returns></returns>

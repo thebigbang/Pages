@@ -15,19 +15,18 @@
  *  
  * Copyright (c) Meï-Garino Jérémy 
 */
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+
+using System.Text.RegularExpressions;
 
 namespace CustomPages.Models
 {
-    //todo: add metaDescription management.
     public class GenericPageModel
     {
         /// <summary>
         /// Nom Convivial du fichier (pour Write)
         /// Nom du fichier (pour Read)
         /// </summary>
-        public string Name { get; set; }        
+        public string Name { get; set; }
         /// <summary>
         /// Contenu de l'article
         /// </summary>
@@ -57,5 +56,25 @@ namespace CustomPages.Models
         /// </summary>
         public bool IsSystem { get; set; }
 
+        public string MetaDescription
+        {
+            get
+            {
+                if (HtmlData.Length < 20)
+                {
+                    return null;
+                }
+                string cleanDescr = DescriptionNoHtml;
+                if (cleanDescr.Length < 150)
+                {
+                    return cleanDescr;
+                }
+                return cleanDescr.Substring(0, 150);
+            }
+        }
+        public string DescriptionNoHtml
+        {
+            get { return Regex.Replace(HtmlData, "<.*?>", string.Empty); }
+        }
     }
 }

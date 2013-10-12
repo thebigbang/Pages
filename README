@@ -8,6 +8,7 @@ It can handle custom configuration information about pages.
 manage complete independency of controller and views if possible.
 
 #Changelog#
+v0.3: add multilingual management in static controller (admin side at the moment). Add possibility to get a list of languages to choose the one we want to work on or finish translation on.
 v0.2: lots of improvements, GPL licensing for GitHub.
 v0.1: initial Library design
 
