@@ -21,30 +21,12 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading;
+using CustomPages.Configuration;
 
 namespace CustomPages
 {
     class ErrorManager
     {
-        internal const string SiteName = "Accompagnement Osmosource: ";
-        //conf du serveur d'email
-        /// <summary>
-        /// const: contact@osmosource.fr
-        /// </summary>
-        internal const string MailGetter = "contact@osmosource.fr";
-        /// <summary>
-        /// const: smtp.osmosource.fr
-        /// </summary>
-        internal const string SmtpServer = "smtp.osmosource.fr";
-        /// <summary>
-        /// const: 25
-        /// </summary>
-        internal const int SmtpPort = 997;
-        internal const string MailPasswd = "m41Ls1T34dM1nP4ssw0rd";
-        /// <summary>
-        /// const: noreply@osmosource.fr
-        /// </summary>
-        internal const string MailFrom = "noreply@osmosource.fr";
         private readonly string _email, _messageHtml, _messagePlainText, _sujet, _replyto;
         private bool _timeoutExceed;
         
@@ -74,7 +56,7 @@ namespace CustomPages
             {
                 MailMessage email = new MailMessage
                 {
-                    From = new MailAddress(MailFrom),
+                    From = new MailAddress(CustomPagesConfig.Configuration.Parameters.MailFrom),
                     Subject = _sujet,
                     Body = String.Format(_messagePlainText),
                     BodyEncoding = Encoding.UTF8,
@@ -86,17 +68,17 @@ namespace CustomPages
                     email.ReplyToList.Add(new MailAddress(_replyto));
                 }
                 //partie html du message
-                AlternateView view = AlternateView.CreateAlternateViewFromString(_messageHtml, Encoding.UTF8,/*new ContentType(*/"text/html"/*)*/);
+                AlternateView view = AlternateView.CreateAlternateViewFromString(_messageHtml, Encoding.UTF8,"text/html");
                 email.AlternateViews.Add(view);
                 //fin partie html du message
 
-                email.ReplyToList.Add(new MailAddress(MailGetter));
+                email.ReplyToList.Add(new MailAddress(CustomPagesConfig.Configuration.Parameters.MailGetter));
                
                     email.To.Add(_email);
 
-                SmtpClient smtp = new SmtpClient(SmtpServer, SmtpPort)
+                    SmtpClient smtp = new SmtpClient(CustomPagesConfig.Configuration.Parameters.SMTPServer, CustomPagesConfig.Configuration.Parameters.SMTPServerPort)
                 {
-                    Credentials = new NetworkCredential(MailFrom, MailPasswd),
+                    Credentials = new NetworkCredential(CustomPagesConfig.Configuration.Parameters.MailFrom, CustomPagesConfig.Configuration.Parameters.MailFromPassword),
                     EnableSsl = false
                 };
                 bool sendingMail = true;
@@ -120,13 +102,13 @@ namespace CustomPages
             }
             catch (TimeoutException toe)
             {
-                StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\osmosource\\errors.log", true);
+                StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName+ "\\errors.log", true);
                 str.WriteLine(DateTime.Now + " dest: " + _email + " error: " + toe.Message);
                 str.Close();
             }
             catch (Exception e)
             {
-                StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\osmosource\\errors.log", true);
+                StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName + "\\errors.log", true);
                 str.WriteLine(DateTime.Now + " dest: " + _email + " error: " + e.Message);
                 str.Close();
                 if (!_timeoutExceed)
@@ -143,7 +125,7 @@ namespace CustomPages
         /// <param name="e"></param>
         public static void SendMailError(Exception e)
         {
-            string errorMsg = "une erreur de requête est survenue sur le site d'Osmosource. <br/>" +
+            string errorMsg = "une erreur de requête est survenue sur le site d'" + CustomPagesConfig.Configuration.Parameters.SiteName + ". <br/>" +
                               "Cette erreur se situe au niveau de la bibliothèque \"CustomPages\"<br/>" +
                               "Le message d'erreur est le suivant:." +
                               "<br/>" + e.Message +
@@ -155,7 +137,7 @@ namespace CustomPages
                               "<br/>" + e.StackTrace +
                               "<br/>" +
                               "<br> Merci bien de vérifier l'authenticitié de la requête.";
-            new ErrorManager("jeremy@c-g-m.org", "Erreur survenue sur le site Osmosource.", errorMsg, errorMsg);
+            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg);
         }
 
         /// <summary>
@@ -171,7 +153,7 @@ namespace CustomPages
                 mailData += "Sujet:<b>" + subject + "</b><br/>";
             if (!String.IsNullOrEmpty(content))
                 mailData += "Contenu:<i><b>" + content + "</b></i><br/>";
-            string errorMsg = "une erreur de requête est survenue sur le site d'Osmosource. <br/>" +
+            string errorMsg = "une erreur de requête est survenue sur le site d'" + CustomPagesConfig.Configuration.Parameters.SiteName + ". <br/>" +
                   "Le message d'erreur est le suivant:." +
                               "<br/>" + e.Message +
                               "<br/>" +
@@ -183,7 +165,7 @@ namespace CustomPages
                               "<br/>" +
                               mailData +
                   "<br> Merci bien de vérifier l'authenticitié de la requête.";
-            new ErrorManager("jeremy@c-g-m.org", "Erreur survenue sur le site Accompagnement Osmosource.", errorMsg, errorMsg);
+            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg);
         }
     }
 }

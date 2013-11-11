@@ -25,11 +25,9 @@ using CustomPages.Models;
 
 namespace CustomPages
 {
-    internal enum PageParameters
+    public enum ErrorManagingMethod
     {
-        Title,
-        IsDraft,
-        IsReadOnly
+        Email,FileLogs
     }
     public static class PageLogik
     {
@@ -93,10 +91,6 @@ namespace CustomPages
         /// (zone de fin)
         /// </summary>
         private const string HtmlParamSystemEnd = "#!SYSTEM#";
-        /// <summary>
-        /// Nom du site.
-        /// </summary>
-        public const string SiteName = "Osmosource";
         /// <summary>
         /// Renvoie la liste des informations et des pages complètes. La liste est rangée selon SortOrder.
         ///<para>old: ne renvoie que les noms des pages(comprendre nom des fichiers) car ne lit pas les fichiers.</para> 
@@ -396,10 +390,9 @@ namespace CustomPages
         public static GenericPageModel GetSystemPage(string pageName)
         {
             GenericPageModel model = ReadHtmlData(pageName);
-            if (Models.Admin.GenericPageModel.Error != null &&
-                Models.Admin.GenericPageModel.Error is FileNotFoundException)
+            if (Models.Admin.GenericPageModel.Error is FileNotFoundException)
             {
-                WriteHtmlData(new Models.Admin.GenericPageModel() { IsDraft = false, IsReadonly = true, IsSystem = true, Name = pageName,HtmlData = ""});
+                WriteHtmlData(new Models.Admin.GenericPageModel { IsDraft = false, IsReadonly = true, IsSystem = true, Name = pageName,HtmlData = ""});
 
                 return GetSystemPage(pageName);
             }

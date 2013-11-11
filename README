@@ -5,9 +5,11 @@ The main difference is that instead of using a database, it is using the filesys
 It can handle custom configuration information about pages.
 
 #todo#
+todo bug urgent: repull on github, remove error manager and associated pwds...
 manage complete independency of controller and views if possible.
 
 #Changelog#
+v0.4: redesign of the errorManager, after an implementation abheration... Making an web.config configurable stuff, more scallable for clients.
 v0.3: add multilingual management in static controller (admin side at the moment). Add possibility to get a list of languages to choose the one we want to work on or finish translation on.
 v0.2: lots of improvements, GPL licensing for GitHub.
 v0.1: initial Library design
