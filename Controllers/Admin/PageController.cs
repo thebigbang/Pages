@@ -17,6 +17,7 @@
 */
 
 using System.Collections.Generic;
+using System.Text;
 using System.Web;
 using CustomPages.Models.Admin;
 
@@ -42,6 +43,7 @@ namespace CustomPages.Controllers.Admin
         /// <returns></returns>
         public static bool Create(GenericPageModel model,string la=null)
         {
+            model.Name =CleanString(model.Name);
             if (la != null) currentLang = la;
             try
             {
@@ -81,6 +83,46 @@ namespace CustomPages.Controllers.Admin
             }
             return ss;
         }
-
+        /// <summary>
+        /// Clean a string object for filesystem or/and SEO purposes.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string CleanString(string str)
+        {
+            while (str.EndsWith("."))
+            {
+                str = str.Remove(str.Length - 1);
+            } while (str.EndsWith(" "))
+            {
+                str = str.Remove(str.Length - 1);
+            }
+            StringBuilder u = new StringBuilder(str);
+            u = u.Replace("ù", "u");
+            u = u.Replace("û", "u");
+            u = u.Replace("ï", "i");
+            u = u.Replace("î", "i");
+            u = u.Replace("ô", "o");
+            u = u.Replace("œ", "o");
+            u = u.Replace("ö", "o");
+            u = u.Replace("é", "e");
+            u = u.Replace("ê", "e");
+            u = u.Replace("ë", "e");
+            u = u.Replace("è", "e");
+            u = u.Replace("â", "a");
+            u = u.Replace("à", "a");
+            u = u.Replace("'", "");
+            u = u.Replace("’", "");
+            u = u.Replace("&", "et");
+            u = u.Replace("ç", "c");
+            u = u.Replace("%", "");
+            u = u.Replace("?", "");
+            u = u.Replace("/", "-");
+            u = u.Replace("\"", "");
+            u = u.Replace(",", "");
+            u = u.Replace("°", "");
+            u = u.Replace(" ", "-");
+            return u.ToString().ToLowerInvariant();
+        }
     }
 }

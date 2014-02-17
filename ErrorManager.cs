@@ -61,7 +61,7 @@ namespace CustomPages
                     Body = String.Format(_messagePlainText),
                     BodyEncoding = Encoding.UTF8,
                     HeadersEncoding = Encoding.UTF8,
-                    SubjectEncoding = Encoding.UTF8
+                    SubjectEncoding = Encoding.UTF8, 
                 };
                 if (_replyto != null)
                 {
@@ -81,7 +81,7 @@ namespace CustomPages
                     Credentials = new NetworkCredential(CustomPagesConfig.Configuration.Parameters.MailFrom, CustomPagesConfig.Configuration.Parameters.MailFromPassword),
                     EnableSsl = false
                 };
-                bool sendingMail = true;
+               /* bool sendingMail = true;
                 new Thread(() =>
                 {
                     int timout = 0;
@@ -96,25 +96,29 @@ namespace CustomPages
                         }
                         timout++;
                     }
-                }).Start();
+                }).Start();*/
                 smtp.Send(email);
-                sendingMail = false;
+               // sendingMail = false;
             }
             catch (TimeoutException toe)
             {
+                Directory.CreateDirectory("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName +
+                                          "\\");
                 StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName+ "\\errors.log", true);
                 str.WriteLine(DateTime.Now + " dest: " + _email + " error: " + toe.Message);
                 str.Close();
             }
             catch (Exception e)
             {
+                Directory.CreateDirectory("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName +
+                                          "\\");
                 StreamWriter str = new StreamWriter("c:\\inetpub\\logs\\" + CustomPagesConfig.Configuration.Parameters.SiteName + "\\errors.log", true);
                 str.WriteLine(DateTime.Now + " dest: " + _email + " error: " + e.Message);
                 str.Close();
-                if (!_timeoutExceed)
+               /* if (!_timeoutExceed)
                 {
                     LogErrors(e);
-                }
+                }*/
             }
         }
 

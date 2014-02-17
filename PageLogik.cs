@@ -21,20 +21,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using CustomPages.Configuration;
 using CustomPages.Models;
 
 namespace CustomPages
 {
     public enum ErrorManagingMethod
     {
-        Email,FileLogs
+        Email, FileLogs
     }
     public static class PageLogik
     {
         /// <summary>
         /// dossier ou sont rangés les pages .html
+        /// v0.5: configuré dans le web.config (si absent renvoie "~/content/pages/" ancienne valeur par défaut).
+        /// v0.4 et avant: renvoyait toujours "~/content/pages/";
+        //internal const string PageFolderPath = "~/Content/pages/";
         /// </summary>
-        internal const string PageFolderPath = "~/Content/pages/";
+        internal static string PageFolderPath
+        {
+            get { return CustomPagesConfig.Configuration.Parameters.PageFolderPath; }
+        }
         /// <summary>
         /// Permet de séparer via nom de fichier les brouillons des autres pages.
         /// Ceux dont le nom commence par "_dr_" sont brouillons, pas les autres.
@@ -192,8 +199,14 @@ namespace CustomPages
                 fullPathFile = new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageFolderPath + fullPathFile);
 
             }
+
             try
             {
+                if (!Directory.Exists(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageFolderPath)))
+                {
+                    Directory.CreateDirectory(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageFolderPath));
+                    throw new FileNotFoundException("Le dossier n'existait pas, le fichier serait donc introuvable...");
+                }
                 StreamReader reader =
                     new StreamReader(fullPathFile);
                 s = reader.ReadToEnd();
@@ -392,7 +405,7 @@ namespace CustomPages
             GenericPageModel model = ReadHtmlData(pageName);
             if (Models.Admin.GenericPageModel.Error is FileNotFoundException)
             {
-                WriteHtmlData(new Models.Admin.GenericPageModel { IsDraft = false, IsReadonly = true, IsSystem = true, Name = pageName,HtmlData = ""});
+                WriteHtmlData(new Models.Admin.GenericPageModel { IsDraft = false, IsReadonly = true, IsSystem = true, Name = pageName, HtmlData = "" });
 
                 return GetSystemPage(pageName);
             }

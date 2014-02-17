@@ -12,6 +12,7 @@ namespace CustomPages.Configuration
         internal const string MailFromParam = "mailconfigsender";
         internal const string MailPwdParam = "mailconfigpassword";
         internal const string MailDevParam = "maildev";
+        internal const string PageFolderPathParam = "folderpath";
 
         /// <summary>
         /// Name of our custom parameters row, not very usefull, more a key than anything else.
@@ -70,5 +71,23 @@ namespace CustomPages.Configuration
             get { return (string)this[MailDevParam]; }
             set { this[MailDevParam] = value; }
         }
+        /// <summary>
+        /// added in v0.5, no need to update your web.config: will automatically return the default old value if absent.
+        /// </summary>
+        [ConfigurationProperty(PageFolderPathParam)]
+        public string PageFolderPath
+        {
+            get
+            {
+                string s = (string)this[PageFolderPathParam];
+                if (string.IsNullOrEmpty(s))
+                {
+                    s = DefaultPageFolderPath;
+                }
+                return s;
+            }
+            set { this[PageFolderPathParam] = value; }
+        }
+        private const string DefaultPageFolderPath = "~/Content/pages/";
     }
 }
