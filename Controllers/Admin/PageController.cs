@@ -47,7 +47,13 @@ namespace CustomPages.Controllers.Admin
             if (la != null) currentLang = la;
             try
             {
-                System.IO.File.Create(new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageLogik.PageFolderPath + model.Name + "_"+currentLang+".html")).Close();
+                string finalPath =
+                    new HttpServerUtilityWrapper(HttpContext.Current.Server).MapPath(PageLogik.PageFolderPath +
+                                                                                     model.Name + "_" + currentLang +
+                                                                                     ".html");
+                if (!System.IO.Directory.Exists(finalPath))
+                    System.IO.Directory.CreateDirectory(finalPath);
+                System.IO.File.Create(finalPath).Close();
                 return true;
             }
             catch { return false; }
