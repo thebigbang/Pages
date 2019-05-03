@@ -37,6 +37,7 @@ namespace CustomPages.Controllers.Admin
 
         /// <summary>
         /// permet la creation d'une page perso
+        /// bug: créée un dossier au mieu d'un fichier??
         /// </summary>
         /// <param name="model"></param>
         /// <param name="la">Language to use </param>

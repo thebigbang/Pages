@@ -20,7 +20,6 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using System.Threading;
 using CustomPages.Configuration;
 
 namespace CustomPages
@@ -28,7 +27,6 @@ namespace CustomPages
     class ErrorManager
     {
         private readonly string _email, _messageHtml, _messagePlainText, _sujet, _replyto;
-        private bool _timeoutExceed;
         
         /// <summary>
         /// Permet d'envoyer un email automatiquement
@@ -48,9 +46,8 @@ namespace CustomPages
             {
                 _replyto = replyto;
             }
-            Send();
         }
-        private void Send()
+        public void Send()
         {
             try
             {
@@ -141,7 +138,7 @@ namespace CustomPages
                               "<br/>" + e.StackTrace +
                               "<br/>" +
                               "<br> Merci bien de vérifier l'authenticitié de la requête.";
-            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg);
+            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg).Send();
         }
 
         /// <summary>
@@ -169,7 +166,7 @@ namespace CustomPages
                               "<br/>" +
                               mailData +
                   "<br> Merci bien de vérifier l'authenticitié de la requête.";
-            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg);
+            new ErrorManager(CustomPagesConfig.Configuration.Parameters.MailDev, "Erreur survenue sur le site " + CustomPagesConfig.Configuration.Parameters.SiteName + ".", errorMsg, errorMsg).Send();
         }
     }
 }

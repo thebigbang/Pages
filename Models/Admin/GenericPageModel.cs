@@ -44,7 +44,7 @@ namespace CustomPages.Models.Admin
         /// <summary>
         /// Utilisé en cas d'erreurs
         /// </summary>
-        public static Exception Error;
+        public static Exception Error { get; set; }
         /// <summary>
         /// Convert a GenericPageModel to Admin.GenericPageModel.
         /// </summary>
